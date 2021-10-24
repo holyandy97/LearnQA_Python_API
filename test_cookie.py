@@ -10,3 +10,4 @@ def test_cookie_assert():
         cookie_key: cookie_value
     }
     assert cookie == {"HomeWork": "hw_value"}, "Wrong cookie"
+    
