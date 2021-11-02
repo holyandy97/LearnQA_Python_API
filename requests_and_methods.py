@@ -15,11 +15,11 @@ for method in methods:
     for method_value in methods:
         if method == 'GET':
             response = requests.request(method, url, params={'method': method_value})
-            if method != method_value and 'success' in response.text:
+            if method != method_value and 'success' in response.text or method == method_value and 'success' not in response.text:
                 print(f'Ответ 4:\nНе совпадает реальный тип запроса{method} и параметр {method_value}, '
                       f'но сервер отвечает {response.text}')
         else:
             response = requests.request(method, url, data={'method': method_value})
-            if method != method_value and 'success' in response.text:
+            if method != method_value and 'success' in response.text or method == method_value and 'success' not in response.text:
                 print(f'Ответ 4:\nНе совпадают реальный тип запроса {method} и параметр {method_value}, '
                       f'но сервер отвечает {response.text}')
