@@ -36,4 +36,4 @@ class TestUserGet(BaseCase):
                                       headers={"x-csrf-token": token},
                                       cookies={"auth_sid": auth_sid})
         Assertions.assert_code_status(get_response, 200)
-        assert get_response.json() == {'username': data2['username']}
+        assert get_response.json() == {'username': data2['username']}, f'Something went wrong:\n{get_response.content}'

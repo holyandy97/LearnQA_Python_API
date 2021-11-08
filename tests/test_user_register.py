@@ -37,11 +37,9 @@ class TestUserRegister(BaseCase):
         data = self.prepare_registration_data()
         del data[missing_field]
         response = MyRequests.post("/user/", data=data)
-        print(response.status_code)
-        print(data)
-
         Assertions.assert_code_status(response, 400)
-        #Assertions.assert_response_text(response, f"The following required params are missed: {missing_field}")
+        assert response.content.decode('utf-8') == f'The following required params are missed: {missing_field}', \
+            f'Something went wrong:\n {response.content}'
 
     def test_create_user_with_short_username(self):
         data = self.prepare_registration_data()
