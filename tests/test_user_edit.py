@@ -1,10 +1,14 @@
 from lib.my_requests import MyRequests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
+import allure
 
 
+@allure.epic("Edit User Cases")
 class TestUserEdit(BaseCase):
 
+    @allure.feature("Edit user")
+    @allure.description("This test creates user and successfully changes user data")
     def test_edit_just_created_user(self):
         # REGISTER
         register_data = self.prepare_registration_data()
@@ -40,6 +44,8 @@ class TestUserEdit(BaseCase):
         Assertions.assert_json_value_by_name(response4, "firstName", new_first_name, "Wrong name of user after edit")
         print(response4.json())
 
+    @allure.feature("Edit user")
+    @allure.description("Negative test to verify that system identify invalid email")
     def test_edit_email_user(self):
         # REGISTER USER AND LOGIN
         data, user_id = self.register()
@@ -53,6 +59,8 @@ class TestUserEdit(BaseCase):
         Assertions.assert_code_status(response3, 400)
         assert response3.content.decode('utf-8') == 'Invalid email format', 'Something went wrong. Email is correct'
 
+    @allure.feature("Edit user")
+    @allure.description("Negative test to verify that we can not change user data without authorization")
     def test_edit_non_auth(self):
         data, user_id = self.register()
         response = MyRequests.put(url=f"/user/{user_id}", data={'firstName': 'new_first_name'})
@@ -60,6 +68,8 @@ class TestUserEdit(BaseCase):
         assert response.content.decode('utf-8') == 'Auth token not supplied', f'Something went wrong. ' \
                                                                                f'Response is {response.content}'
 
+    @allure.feature("Edit user")
+    @allure.description("Negative test to ensure that we can not edit data of another user")
     def test_edit_another_user(self):
         data, user_id_1 = self.register()
         data2, user_id_2 = self.register()
@@ -76,6 +86,8 @@ class TestUserEdit(BaseCase):
         Assertions.assert_json_value_by_name(
             get_response, 'firstName', data2['firstName'], f"Something went wrong: {get_response.json()}")
 
+    @allure.feature("Edit user")
+    @allure.description("Too short email")
     def test_edit_email_to_short(self):
         data, user_id = self.register()
         response, auth_sid, token = self.login(data['email'], data['password'])
